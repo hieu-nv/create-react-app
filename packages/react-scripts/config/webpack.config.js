@@ -70,9 +70,9 @@ const swSrc = paths.swSrc;
 
 // style files regexes
 const cssRegex = /\.css$/;
-const cssModuleRegex = /\.module\.css$/;
+const cssModuleRegex = /\.(m|module)\.css$/;
 const sassRegex = /\.(scss|sass)$/;
-const sassModuleRegex = /\.module\.(scss|sass)$/;
+const sassModuleRegex = /\.(m|module)\.(scss|sass)$/;
 
 const hasJsxRuntime = (() => {
   if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
@@ -128,23 +128,27 @@ module.exports = function (webpackEnv) {
         // package.json
         loader: require.resolve('postcss-loader'),
         options: {
-          // Necessary for external CSS imports to work
-          // https://github.com/facebook/create-react-app/issues/2677
-          ident: 'postcss',
-          plugins: () => [
-            require('postcss-flexbugs-fixes'),
-            require('postcss-preset-env')({
-              autoprefixer: {
-                flexbox: 'no-2009',
-              },
-              stage: 3,
-            }),
-            // Adds PostCSS Normalize as the reset css with default options,
-            // so that it honors browserslist config in package.json
-            // which in turn let's users customize the target behavior as per their needs.
-            postcssNormalize(),
-          ],
-          sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
+          postcssOptions: {
+            plugins: [
+              require('tailwindcss'),
+              require('autoprefixer'),
+              require('postcss-flexbugs-fixes'),
+              [
+                require('postcss-preset-env'),
+                {
+                  autoprefixer: {
+                    flexbox: 'no-2009',
+                  },
+                  stage: 3,
+                },
+              ],
+              // Adds PostCSS Normalize as the reset css with default options,
+              // so that it honors browserslist config in package.json
+              // which in turn let's users customize the target behavior as per their needs.
+              postcssNormalize(),
+            ],
+          },
+          sourceMap: isEnvProduction && shouldUseSourceMap,
         },
       },
     ].filter(Boolean);
@@ -533,7 +537,9 @@ module.exports = function (webpackEnv) {
                   ? shouldUseSourceMap
                   : isEnvDevelopment,
                 modules: {
-                  getLocalIdent: getCSSModuleLocalIdent,
+                  localIdentName: isEnvProduction
+                    ? '[hash:base64:8]'
+                    : '[local]--[hash:base64:8]',
                 },
               }),
             },
@@ -569,7 +575,9 @@ module.exports = function (webpackEnv) {
                     ? shouldUseSourceMap
                     : isEnvDevelopment,
                   modules: {
-                    getLocalIdent: getCSSModuleLocalIdent,
+                    localIdentName: isEnvProduction
+                      ? '[hash:base64]'
+                      : '[local]--[hash:base64]',
                   },
                 },
                 'sass-loader'

@@ -218,7 +218,7 @@ function verifyTypeScriptSetup() {
   if (appTsConfig.compilerOptions == null) {
     appTsConfig.compilerOptions = {};
     firstTimeSetup = true;
-  } 
+  }
 
   for (const option of Object.keys(compilerOptions)) {
     const { parsedValue, value, suggested, reason } = compilerOptions[option];
@@ -290,7 +290,7 @@ function verifyTypeScriptSetup() {
   if (!fs.existsSync(paths.appTypeDeclarations)) {
     fs.writeFileSync(
       paths.appTypeDeclarations,
-      `/// <reference types="react-scripts" />${os.EOL}`
+      `/// <reference types="@hieunv/react-scripts" />${os.EOL}`
     );
   }
 }

@@ -13,3 +13,5 @@ yarn-error.log*
 /.changelog
 .npm/
 yarn.lock
+packages/react-scripts/template/coverage/
+packages/react-scripts/template-typescript/coverage/

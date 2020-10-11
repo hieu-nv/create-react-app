@@ -18,7 +18,7 @@ module.exports = function getLocalIdent(
 ) {
   // Use the filename or folder name, based on some uses the index.js / index.module.(css|scss|sass) project style
   const fileNameOrFolder = context.resourcePath.match(
-    /index\.module\.(css|scss|sass)$/
+    /index\.(module|m)\.(css|scss|sass)$/
   )
     ? '[folder]'
     : '[name]';
@@ -35,6 +35,9 @@ module.exports = function getLocalIdent(
     fileNameOrFolder + '_' + localName + '__' + hash,
     options
   );
-  // Remove the .module that appears in every classname when based on the file and replace all "." with "_".
-  return className.replace('.module_', '_').replace(/\./g, '_');
+  // remove the .module that appears in every classname when based on the file.
+  return className
+    .replace('.module_', '_')
+    .replace('.m_', '_')
+    .replace(/\./g, '_');
 };

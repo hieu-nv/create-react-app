@@ -37,7 +37,7 @@ module.exports = class TestSetup {
     const shouldInstallScripts = !this.isLocal;
     if (shouldInstallScripts) {
       packageJson.dependencies = Object.assign({}, packageJson.dependencies, {
-        'react-scripts': 'latest',
+        '@hieunv/react-scripts': 'latest',
       });
     }
     packageJson.scripts = Object.assign({}, packageJson.scripts, {
@@ -78,7 +78,7 @@ module.exports = class TestSetup {
         ),
         path.join(this.testDirectory, 'node_modules', '.bin', 'react-scripts')
       );
-      await execa('yarnpkg', ['link', 'react-scripts'], {
+      await execa('yarnpkg', ['link', '@hieunv/react-scripts'], {
         cwd: this.testDirectory,
       });
     }
